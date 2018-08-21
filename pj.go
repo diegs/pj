@@ -17,7 +17,9 @@ func roundtripJSON(in, out *os.File) error {
 		return fmt.Errorf("read json: %v", err)
 	}
 
-	e := json.NewEncoder(bufio.NewWriter(out))
+	w := bufio.NewWriter(out)
+	defer w.Flush()
+	e := json.NewEncoder(w)
 	e.SetIndent("", "  ")
 	if err := e.Encode(&raw); err != nil {
 		return fmt.Errorf("write json: %v", err)
